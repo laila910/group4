@@ -17,6 +17,9 @@
        $name  = CleanInputs($_POST['name']);
        $email = CleanInputs($_POST['email']);
        $password = CleanInputs($_POST['password']); 
+       $bDate    =  strtotime($_POST['Bdate']);
+
+       $checkDate = strtotime('1/1/2010');
 
         // Name Validation ...
         if(!empty($name)){
@@ -57,6 +60,21 @@
 
 
 
+
+          if(!empty($bDate)){
+              // code ... 
+            if($bDate > $checkDate){
+
+                $errorMessages['Bdate'] = "Date Must be < 1/1/2010";
+            }
+
+          }else{
+
+            $errorMessages['Bdate'] = "Invalid Date";
+          }
+
+
+
      if(count($errorMessages) == 0){
 
         echo 'Valid Data';
@@ -76,6 +94,61 @@
 
 
     }
+
+
+
+
+// date ... 
+
+ // date(format,timestamp);
+
+   //date('');
+
+
+//    d 1:31
+//    D Mon,Sun 
+//    m 1:12
+//    M  jan,dec
+//    y 21,22 
+//    Y  2021,2022
+
+ // echo  date('D-m-Y');
+
+
+//   h 01:12 
+//   H 00:23 
+//   i 00:59
+//   s 00:59 
+//   a (am , pm )
+//   A (AM,PM)
+
+
+
+  //echo date('d/Y  h:i:s a',1625657594);
+
+  //echo  time(); 
+
+
+   //  12/2/2019 9 30 21        12/02/2019 09:30:21 am    02/12/2019 09:30:21 am
+   // mktime(hour,min,sec,month,day,year);
+   // echo  mktime(9,30,21,12,2,2019);   // 1549960221
+
+
+      // echo date('d/m/Y h:i:s a',1575275421);
+
+
+     
+
+
+    //  strtotime('1/1/2010');
+
+
+   //echo date('d/m/y h:i:s  a',1609455600);
+
+
+
+
+
 
 
 
@@ -113,6 +186,13 @@
     <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
   </div>
  
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">Birth Date</label>
+    <input type="date"  name="Bdate" class="form-control" >
+  </div>
+
+
   
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -120,3 +200,8 @@
 
 </body>
 </html>
+
+
+
+
+
