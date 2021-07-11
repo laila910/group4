@@ -18,7 +18,7 @@
 
      $FinalName = rand().time().'.'.$FileExtension;
 
-      $allowedExtension = ['png','jpg','pdf'];    
+      $allowedExtension = ['png','jpg','pdf','mp4'];    
 
        if(in_array($FileExtension,$allowedExtension)){
         // code ....
@@ -87,3 +87,7 @@
 
 </body>
 </html>
+
+
+
+
