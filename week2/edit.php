@@ -1,7 +1,8 @@
 <?php 
 
    require 'dbConnection.php';
-    
+   require 'checkLogin.php';
+
    $id = $_GET['id'];
    $id = filter_var($id,FILTER_SANITIZE_NUMBER_INT);
   
@@ -167,8 +168,4 @@
 
 </body>
 </html>
-
-
-
-
 

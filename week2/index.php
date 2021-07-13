@@ -2,7 +2,12 @@
 
     require 'dbConnection.php'; 
 
-    $sql = "select * from users ";
+
+    require 'checkLogin.php';
+
+
+
+    $sql = "select * from users order by id desc ";
 
     $op  = mysqli_query($con,$sql);
 
@@ -47,7 +52,18 @@
  
 
         <div class="page-header">
-            <h1>Read Users </h1>
+            <h1>Read Users </h1> <br>
+
+            <?php 
+            
+           echo 'WELCOME '.  $_SESSION['data']['name'];
+            
+            ?>
+        <a href="logout.php">Logout</a>
+
+
+
+
 
 
       <?php 
