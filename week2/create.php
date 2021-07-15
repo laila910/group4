@@ -2,6 +2,15 @@
 
    require 'dbConnection.php';
 
+
+    # Fetch dep Query .... 
+    $sql  = "select * from departments";
+    $op   = mysqli_query($con,$sql); 
+
+
+
+
+
    # Clean input ...
    function CleanInputs($input){
 
@@ -19,6 +28,12 @@
        $email = CleanInputs($_POST['email']);
        $password = CleanInputs($_POST['password']); 
        $bDate    =  strtotime($_POST['Bdate']);
+       $dep_id   = $_POST['dep_id'];
+
+     
+    
+
+
 
        $checkDate = strtotime('1/1/2010');
 
@@ -76,6 +91,25 @@
 
 
 
+        if(!empty($dep_id)){
+      
+          if(!filter_var($dep_id,FILTER_VALIDATE_INT)){
+
+            $errorMessages['dep_id'] = "Invalid department";
+
+          }
+
+
+        }else{
+          $errorMessages['dep_id'] = "Invalid department";
+        }
+
+
+
+
+
+
+
      if(count($errorMessages) == 0){
 
           // DB CODE... 
@@ -84,16 +118,16 @@
           $password = sha1($password);
 
 
-          $sql = "insert into users (name,email,password,bDate) values ('$name','$email','$password','$date')";
+          $sql = "insert into users (name,email,password,bDate,dep_id) values ('$name','$email','$password','$date',$dep_id)";
 
           $op =  mysqli_query($con,$sql);
 
           //mysqli_error($con);
 
        if($op){
-         echo 'Data Inserted';
+               header("Location: login.php");
        }else{
-         echo 'Error Try Again';
+              echo 'Error Try Again';
        }
 
 
@@ -151,6 +185,22 @@
   <div class="form-group">
     <label for="exampleInputPassword1">New Password</label>
     <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+ 
+
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">Department</label>
+    <select  name="dep_id" class="form-control" >
+  
+   <?php 
+       while( $data = mysqli_fetch_assoc($op)){ 
+    ?>
+    <option value="<?php echo $data['id'];?>" ><?php echo $data['title'];?></option> 
+
+    <?php } ?>
+  
+  </select>
   </div>
  
 

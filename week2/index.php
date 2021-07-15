@@ -1,15 +1,13 @@
 <?php 
 
     require 'dbConnection.php'; 
-
-
     require 'checkLogin.php';
 
-
-
-    $sql = "select * from users order by id desc ";
+    $sql = "select  users.* ,departments.id as departmentID , departments.title as title    from users inner join departments on users.dep_id = departments.id  order by users.id desc ";
 
     $op  = mysqli_query($con,$sql);
+
+
 
 
 ?>
@@ -87,6 +85,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Birth Date</th>
+                <th>departments</th>
                 <th>Action</th>
             </tr>
 
@@ -101,6 +100,7 @@
                  <td> <?php echo $data['name'];?></td>
                  <td> <?php echo $data['email'];?></td>
                  <td> <?php echo $data['bDate'];?></td>
+                 <td> <?php echo $data['title'];?></td>
 
                  <td>
                  <a href='delete.php?id=<?php echo $data['id'];?>' class='btn btn-danger m-r-1em'>Delete</a>

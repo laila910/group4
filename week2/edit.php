@@ -20,6 +20,9 @@
 
 
 
+
+
+
    # Clean input ...
    function CleanInputs($input){
 
@@ -36,6 +39,8 @@
        $name  = CleanInputs($_POST['name']);
        $email = CleanInputs($_POST['email']);
        $bDate =  strtotime($_POST['Bdate']);
+       $dep_id = $_POST['dep_id'];
+
 
        $checkDate = strtotime('1/1/2010');
 
@@ -76,12 +81,30 @@
 
 
 
+
+          if(!empty($dep_id)){
+      
+            if(!filter_var($dep_id,FILTER_VALIDATE_INT)){
+  
+              $errorMessages['dep_id'] = "Invalid department";
+  
+            }
+  
+  
+          }else{
+            $errorMessages['dep_id'] = "Invalid department";
+          }
+  
+  
+
+
+
      if(count($errorMessages) == 0){
 
           // DB CODE... 
           $date = $_POST['Bdate'];
 
-          $sql  = "update users set name='$name' , email ='$email' , bDate ='$date'  where id =$id ";
+          $sql  = "update users set name='$name' , email ='$email' , bDate ='$date' , dep_id = $dep_id  where id =$id ";
      
           $op   =  mysqli_query($con,$sql);
 
@@ -123,6 +146,11 @@
   
     
 
+     
+  
+       # Fetch dep Query .... 
+       $dep_sql  = "select * from departments";
+       $dep_op   = mysqli_query($con,$dep_sql); 
 
 
 ?>
@@ -153,6 +181,23 @@
     <label for="exampleInputEmail1">Email address</label>
     <input type="email" name="email"  value="<?php echo $data['email'];?>" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
   </div>
+
+
+
+  <div class="form-group">
+    <label for="exampleInputPassword1">Department</label>
+    <select  name="dep_id" class="form-control" >
+  
+   <?php 
+       while( $dep_data = mysqli_fetch_assoc($dep_op)){ 
+    ?>
+    <option value="<?php echo $dep_data['id'];?>"    <?php if($dep_data['id'] == $data['dep_id'] ){ echo 'selected';}?>   ><?php echo $dep_data['title'];?></option> 
+
+    <?php } ?>
+  
+  </select>
+  </div>
+
 
 
   <div class="form-group">
