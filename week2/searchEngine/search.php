@@ -1,7 +1,7 @@
 <?php 
 
    require '../dbConnection.php';
-
+   require '../validation.php';
    # Clean input ...
    function CleanInputs($input){
 
@@ -23,6 +23,9 @@
             $errorMessages['SearchKey'] = "Required";
         }
 
+
+
+        // var_dump(validation($_POST['key'],0));
 
 
      if(count($errorMessages) == 0){
