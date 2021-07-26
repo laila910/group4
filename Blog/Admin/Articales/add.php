@@ -4,7 +4,7 @@
    include '../helpers/db.php';
 
 
-  $sql = "select * from adminroles";
+  $sql = "select * from articalecategories";
   $op  = mysqli_query($con,$sql);
 
 
@@ -13,79 +13,121 @@
        
     // LOGIC ... 
 
-      $name  = CleanInputs(Sanitize($_POST['name'],2));
-      $email = CleanInputs($_POST['email']);
-      $password = $_POST['password'];
-      $role_id  = Sanitize($_POST['role_id'],1);
+      $title   = CleanInputs(Sanitize($_POST['title'],2));
+      $cat_id  = Sanitize($_POST['cat_id'],1);
+      $content = CleanInputs($_POST['content']);
+
 
 
 
 
       $Message = [];
       # Check Validation ... 
-      if(!Validator($name,1)){
+      if(!Validator($title,1)){
       
-        $Message['name'] = "Name Field Required";
+        $Message['title'] = "Title Field Required";
 
       }
       
-      if(!Validator($name,2)){
+      if(!Validator($title,2)){
       
-        $Message['NameLength'] = "Title length must be > 3";
-
-      }
-
-
-    
-     if(!Validator($password,2,6)){
-      
-        $Message['password'] = "Password length must be >= 6";
+        $Message['TitleLength'] = "Title length must be > 3";
 
       }
 
 
-     if(!Validator($role_id,3)){
-       $Message['Role'] = "Invalid Role ";
+
+      if(!Validator($content,1)){
+      
+        $Message['content'] = "Content Field Required";
+
+      }
+      
+      if(!Validator($content,2,10)){
+      
+        $Message['ContentLength'] = "Content length must be >= 100";
+
+      }
+
+
+
+
+     if(!Validator($cat_id,3)){
+       $Message['Category'] = "Invalid Category ";
      }
 
 
-     if(!Validator($email,1)){
+
+
+        // CODE ... 
+        $imageName     = $_FILES['image']['name'];
+
+        $nameArray = explode('.',$imageName);
+        $FileExtension = strtolower($nameArray[1]);
+   
+     if(!Validator($imageName,1)){
       
-      $Message['emailRequird'] = "Email Field Required";
+      $Message['image'] = "image Field Required";
 
     }
 
-    if(!Validator($email,4)){
+
+    if(!Validator($FileExtension,5)){
       
-      $Message['email'] = "Invalid Email";
+      $Message['imageExtension'] = "Invalid Image Extension";
 
     }
-
-
 
      if(count($Message) > 0){
        $_SESSION['messages'] = $Message;
              
     }else{
 
+
+
+
+
+      $tmp_path = $_FILES['image']['tmp_name'];
+      // $size     = $_FILES['uploadedFile']['size'];
+      // $type     = $_FILES['uploadedFile']['type'];
+        
+
+ 
+       $FinalName = rand().time().'.'.$FileExtension;
+ 
+       $disFolder = './uploads/';
+         
+       $disPath  = $disFolder.$FinalName;
+ 
+     if(move_uploaded_file($tmp_path,$disPath))
+       {
+              
+   $content = str_replace("'",'_',$content);
+
+
     # DB OPERATION .... 
-
-    $password = sha1($password);
-
-     $insertSql = "insert into admins (name,email,password,role_id) values ('$name','$email','$password',$role_id)";
+     $insertSql = "insert into articales (title,content,image,cat_id,added_by) values ('$title','$content','$FinalName',$cat_id,3)";
 
      $InsertOp  = mysqli_query($con,$insertSql);
 
+   
      if($InsertOp){
 
           $Message['Result'] = "Data inserted.";
         
      }else{
          $Message['Result']  = "Error Try Again.";
+
+      }
+
+            }else{
+               $Message['Result'] = "Error In Uploading";
+            }
+ 
+
      
 
 
-      }
       $_SESSION['messages'] = $Message;
 
       header('Location: index.php');
@@ -93,16 +135,6 @@
      }
 
    }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -147,7 +179,7 @@
                              }else{
                         ?>
                         
-                        <li class="breadcrumb-item active">Add Admin</li>
+                        <li class="breadcrumb-item active">Add Articale</li>
                         <?php } ?>
                         
                         
@@ -161,25 +193,21 @@
  <form  method="post"  action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>"  enctype ="multipart/form-data">
  
  <div class="form-group">
-    <label for="exampleInputEmail1">Name</label>
-    <input type="text"  name="name" class="form-control" id="exampleInputName" aria-describedby="" placeholder="Enter Name">
+    <label for="exampleInput">Title</label>
+    <input type="text"  name="title" class="form-control" id="exampleInputName" aria-describedby="" placeholder="Enter Title">
   </div>
 
 
   <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <label for="exampleInputEmail1">Content</label>
+   <textarea name="content" class="form-control" ></textarea>
   </div>
 
-  <div class="form-group">
-    <label for="exampleInputPassword1"> Password</label>
-    <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
  
   
   <div class="form-group">
-    <label for="exampleInput"> Role type </label>
-  <select name="role_id" class="form-control"> 
+    <label for="exampleInput"> Category </label>
+  <select name="cat_id" class="form-control"> 
   <?php 
      while($data = mysqli_fetch_assoc($op)){
   ?>
@@ -190,6 +218,13 @@
  
 
 
+
+  
+  <div class="form-group">
+    <label for="exampleInputEmail1">Upload Image</label>
+    <br>
+   <input type="file" name="image"  >
+  </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
