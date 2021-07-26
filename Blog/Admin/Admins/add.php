@@ -67,22 +67,25 @@
 
     # DB OPERATION .... 
 
-    // $sql = "insert into adminroles (title) values ('$title')";
+    $password = sha1($password);
 
-    // $op  = mysqli_query($con,$sql);
+     $insertSql = "insert into admins (name,email,password,role_id) values ('$name','$email','$password',$role_id)";
 
-    // if($op){
+     $InsertOp  = mysqli_query($con,$insertSql);
 
-    //      $Message['Result'] = "Data inserted.";
-    //     $_SESSION['messages'] = $Message;
-    // }else{
-    //     $Message['Result']  = "Error Try Again.";
+     if($InsertOp){
+
+          $Message['Result'] = "Data inserted.";
+        
+     }else{
+         $Message['Result']  = "Error Try Again.";
      
-    //     $_SESSION['messages'] = $Message;
 
 
-    //  }
+      }
+      $_SESSION['messages'] = $Message;
 
+      header('Location: index.php');
 
      }
 

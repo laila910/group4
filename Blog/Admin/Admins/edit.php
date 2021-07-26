@@ -30,32 +30,55 @@
        
     // LOGIC ... 
 
-      $title = CleanInputs($_POST['title']);
-      $id    = Sanitize($_POST['id'],1);
+      $name  = CleanInputs($_POST['name']);
+      $email = CleanInputs($_POST['email']);
+      $role_id    = Sanitize($_POST['role_id'],1);
+      $id         = Sanitize($_POST['id'],1);
 
 
+    
       $Message = [];
       # Check Validation ... 
-      if(!Validator($title,1)){
+      if(!Validator($name,1)){
       
-        $Message['title'] = "Title Field Required";
+        $Message['name'] = "Name Field Required";
 
       }
-  
       
-      $length = 3;
-
-      if(!Validator($title,2,$length)){
+      if(!Validator($name,2)){
       
-        $Message['titleLength'] = "Title length must be > ".$length;
+        $Message['NameLength'] = "Title length must be > 3";
 
       }
+
+
+
+
+     if(!Validator($role_id,3)){
+       $Message['Role'] = "Invalid Role ";
+     }
+
+
+     if(!Validator($email,1)){
+      
+      $Message['emailRequird'] = "Email Field Required";
+
+    }
+
+    if(!Validator($email,4)){
+      
+      $Message['email'] = "Invalid Email";
+
+    }
 
 
 
       if(!Validator($id,3)){
           $Message['id'] = "Invalid id";
       }
+
+
+
 
 
      if(count($Message) > 0){
@@ -65,7 +88,7 @@
 
     # DB OPERATION .... 
 
-    $sql = "update adminroles set title='$title' where id = ".$id;
+    $sql = "update admins set name='$name' , email= '$email' , role_id=$role_id  where id = ".$id;
 
     $op  = mysqli_query($con,$sql);
 
@@ -90,13 +113,15 @@
 
 
    # Fetch Data to id . 
-   $sql  = "select * from adminroles where id = ".$id;
+   $sql  = "select * from admins where id = ".$id;
    $op   = mysqli_query($con,$sql);
    $FetchedData = mysqli_fetch_assoc($op);
 
 
 
-
+  # Fetch Admin roles ..  
+   $sql = "select * from adminroles";
+   $op  = mysqli_query($con,$sql);
 
 
 
@@ -159,10 +184,35 @@
 
  <form  method="post"  action="edit.php?id=<?php echo $FetchedData['id'];?>"  enctype ="multipart/form-data">
  
-  <div class="form-group">
-    <label for="exampleInputEmail1">Title</label>
-    <input type="text"  name="title" value="<?php echo $FetchedData['title'];?>" class="form-control" id="exampleInputName" aria-describedby="" placeholder="Enter Title">
+ <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text"  name="name" value="<?php echo $FetchedData['name'];?>" class="form-control" id="exampleInputName" aria-describedby="" placeholder="Enter Name">
   </div>
+
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" name="email" value="<?php echo $FetchedData['email'];?>" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+
+  <!-- <div class="form-group">
+    <label for="exampleInputPassword1"> Password</label>
+    <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div> -->
+ 
+  
+  <div class="form-group">
+    <label for="exampleInput"> Role type </label>
+  <select name="role_id" class="form-control"> 
+  <?php 
+     while($data = mysqli_fetch_assoc($op)){
+  ?>
+  <option value="<?php echo $data['id'];?>"    <?php if($data['id'] == $FetchedData['role_id'] ){ echo 'selected';}?>    ><?php echo $data['title'];?></option>
+ <?php } ?>
+ </select>  
+  </div>
+ 
+
 
    <input type="hidden" name="id" value="<?php echo $FetchedData['id'];?>">
   

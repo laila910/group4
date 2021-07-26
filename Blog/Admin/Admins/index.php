@@ -2,7 +2,8 @@
   include '../helpers/functions.php';
   include '../helpers/db.php';
 
-  $sql = "select * from adminroles";
+  $sql = "select admins.* ,  adminroles.title as title from admins join adminroles on admins.role_id = adminroles.id ";
+
   $op  = mysqli_query($con,$sql); 
   
   
@@ -68,7 +69,9 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Title</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
                                                 <th>Action</th>
                                           
                                             </tr>
@@ -84,6 +87,8 @@
                              ?>           
                                         <tr>
                                                 <td><?php echo $data['id'];?></td>
+                                                <td><?php echo $data['name'];?></td>
+                                                <td><?php echo $data['email'];?></td>
                                                 <td><?php echo $data['title'];?></td>
                                                 <td>
 

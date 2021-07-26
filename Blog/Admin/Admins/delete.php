@@ -18,7 +18,7 @@
       }else{
 
         // DB Opretaion ... 
-        $sql = "delete from adminroles where id =".$id;
+        $sql = "delete from admins where id =".$id;
 
         $op = mysqli_query($con,$sql);
 
