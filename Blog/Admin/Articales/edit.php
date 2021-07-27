@@ -32,8 +32,10 @@
 
     $title   = CleanInputs(Sanitize($_POST['title'],2));
     $cat_id  = Sanitize($_POST['cat_id'],1);
-    $id  = Sanitize($_POST['id'],1);
+    $id      = Sanitize($_POST['id'],1);
     $content = CleanInputs($_POST['content']);
+    $image   = $_POST['OldImage'];
+    $finalImage = $image;
      
 
     $Message = [];
@@ -80,8 +82,13 @@
       // CODE ... 
       $imageName     = $_FILES['image']['name'];
 
+   if(Validator($imageName,1)){
+
       $nameArray = explode('.',$imageName);
       $FileExtension = strtolower($nameArray[1]);
+      
+      $newName = rand().time().'.'.$FileExtension;
+
  
    if(!Validator($imageName,1)){
     
@@ -94,9 +101,8 @@
     
     $Message['imageExtension'] = "Invalid Image Extension";
 
-  }
-
-
+        }
+      }
 
 
      if(count($Message) > 0){
@@ -104,23 +110,68 @@
              
     }else{
 
+
+
+      if(Validator($imageName,1)){
+        // 
+    
+
+      
+
+        $fileTmp      = $_FILES['image']['tmp_name'];
+        $uplodeFolder = './uploads/';
+        $desPath      = $uplodeFolder.$newName;
+
+
+        
+        if(move_uploaded_file($fileTmp,$desPath)){
+          // 
+         
+           $finalImage = $newName;
+      
+
+          if(file_exists('./uploads/'.$image)){
+             
+             unlink('./uploads/'.$image);
+          }
+
+        }else{
+
+          $Message['imageMove'] = "Error in Upload Tru Again";
+
+          }
+
+      }
+    
+
+
+
+
+  if(count($Message) == 0){
     # DB OPERATION .... 
 
-    // $sql = "update admins set name='$name' , email= '$email' , role_id=$role_id  where id = ".$id;
+    $sql = "update articales set title='$title' , content= '$content' , cat_id=$cat_id , image = '$finalImage' where id = ".$id;
 
-    // $op  = mysqli_query($con,$sql);
+    $op  = mysqli_query($con,$sql);
 
-    // if($op){
+    if($op){
 
-    //      $Message['Result'] = "Data updated.";
+         $Message['Result'] = "Data updated.";
        
-    // }else{
-    //      $Message['Result']  = "Error Try Again.";
+    }else{
+         $Message['Result']  = "Error Try Again.";
      
-    //  }
-    //     $_SESSION['messages'] = $Message;
+     }
+
+    }
+
+
+
+
+
+        $_SESSION['messages'] = $Message;
        
-    //     header('Location: index.php');
+        header('Location: index.php');
 
      }
 
@@ -189,7 +240,7 @@
                              }else{
                         ?>
                         
-                        <li class="breadcrumb-item active">Add Role</li>
+                        <li class="breadcrumb-item active">Edit Articale</li>
                         <?php } ?>
                         
                         
@@ -234,11 +285,12 @@
   <div class="form-group">
     <label for="exampleInputEmail1">Upload Image</label>
     <br>
-   <input type="file" name="image">
+   <input type="file" name="image"  >
     <br>
 
     <img src='./uploads/<?php echo $FetchedData['image'];?>'  width="70px" >
 
+    <input type="hidden" name = "OldImage" value="<?php echo $FetchedData['image'];?>">
   </div>
 
 

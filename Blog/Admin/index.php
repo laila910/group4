@@ -1,4 +1,7 @@
 <?php 
+include './helpers/functions.php';
+include './helpers/checkLogin.php';
+
     include 'header.php';
 ?>
   
@@ -6,7 +9,7 @@
         
     
 <?php 
-    include 'nav.php';
+    include 'nav.php'; 
 ?>  
 
 

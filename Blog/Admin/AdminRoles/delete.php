@@ -1,7 +1,9 @@
 <?php 
-
-  include '../helpers/functions.php';
-  include '../helpers/db.php';
+   
+   include '../helpers/functions.php';
+   include '../helpers/checkLogin.php';
+   include '../helpers/checkPrem.php';
+   include '../helpers/db.php';
 
 
  if($_SERVER['REQUEST_METHOD'] == "GET"){

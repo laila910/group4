@@ -44,7 +44,6 @@ function Validator($input,$flag,$length=3){
             break;
        
         case 5:
-
             $allowedExtension = ['png','jpg'];    
 
             if(!(in_array($input,$allowedExtension))){
@@ -80,6 +79,16 @@ function Sanitize($input,$flag){
 }
 
 
+
+
+
+
+ function url($dis){
+
+  return   $txt = "http://".$_SERVER['HTTP_HOST']."/group4/Blog/Admin/".$dis;
+
+
+ }
 
 
 

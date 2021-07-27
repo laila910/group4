@@ -51,7 +51,7 @@
                     ?>
                     
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Admin Roles</li>
+                            <li class="breadcrumb-item active">Articales</li>
                     <?php } ?>
                
                         

@@ -16,6 +16,7 @@
       $title   = CleanInputs(Sanitize($_POST['title'],2));
       $cat_id  = Sanitize($_POST['cat_id'],1);
       $content = CleanInputs($_POST['content']);
+      $by      = $_SESSION['User']['id'];
 
 
 
@@ -106,7 +107,7 @@
 
 
     # DB OPERATION .... 
-     $insertSql = "insert into articales (title,content,image,cat_id,added_by) values ('$title','$content','$FinalName',$cat_id,3)";
+     $insertSql = "insert into articales (title,content,image,cat_id,added_by) values ('$title','$content','$FinalName',$cat_id,$by)";
 
      $InsertOp  = mysqli_query($con,$insertSql);
 
